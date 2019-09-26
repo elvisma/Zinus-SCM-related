@@ -1,0 +1,692 @@
+
+Sub read_AMAZON_Forecast_Number()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 13       'First row of Amazon Forecast Number
+    c = 46     'Starting column
+    bycol = 71   'Ending column
+    nofi = 1     'Number of Item
+    cw = 2       'Column number of current week in ADF.xlsx
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            
+            'AMZ
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ADF.xlsx]all!$A$2:$AO$1500," & cw & ", FALSE),"""")"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 13
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_AMAZON_Actual_Sales()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 6           'First row of Actual sales of Amazon
+    c = 49        'Starting column
+    bycol = 49    'Ending column
+    nofi = 1        'Number of Item
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            
+            'For (AMZ) Fulfilment Center
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ALW.xlsx]all!$A$2:$AO$1500, 2, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = "" , Mason: LEAVE 0 AS IT IS
+            
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 6
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_AMAZON_Fulfillment_Center()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    r = 9           'First row for Amazon fulfilment center
+    c = 50          'Starting column
+    bycol = 50      'Ending column, shoul be same as starting column since we are pasting inventory of the week only.
+    nofi = 1        'Number of Item
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            
+            'For (AMZ) Fulfilment Center
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[AFC.xlsx]all!$A$2:$AO$1500, 2, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = "" , Mason: LEAVE 0 AS IT IS
+            
+            'For (SCM) Fulfilment Center
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[AFC.xlsx]all!$A$2:$AO$1000, 2, FALSE),0)"
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Copy
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = 0 Then .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = "" , Mason: LEAVE 0 AS IT IS
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 9
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_Direct_Import()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    r = 10              'First row for Direct Import
+    c = 52              'Starting column
+    bycol = 71          'Ending column
+    nofi = 1            'Number of Item
+    sdate = "09232019"  'File date of MasterPO
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+        
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 4 '4 indicates row 4
+            
+            'For (AMZ) Direct Import
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([MasterPO_" & sdate & ".xlsm]DirectImport!$A$2:$C$7000, MATCH(1,([MasterPO_" & sdate & ".xlsm]DirectImport!$A$2:$A$7000=" & cname & ")*([MasterPO_" & sdate & ".xlsm]DirectImport!$B$2:$B$7000=H" & r & "),0),3),"""")"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+            'For (SCM) Direct Import
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).FormulaArray = "=IFERROR(INDEX([MasterPO_" & sdate & ".xlsm]DirectImport!$A$2:$C$7000, MATCH(1,([MasterPO_" & sdate & ".xlsm]DirectImport!$A$2:$A$7000=" & cname & ")*([MasterPO_" & sdate & ".xlsm]DirectImport!$B$2:$B$7000=H" & r + 11 & "),0),3),"""")"
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Copy
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = 0 Then .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = ""
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 10
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_confirmed_DO()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 43      'On (ZIN) Confirmed DO
+    c = 50    'Starting Column
+    bycol = 50 'Ending Column, should be same as starting column.
+    nofi = 1
+    d = "09092019"
+    cw = 3      'Column number to read.
+
+    Do While (c < bycol + 1)
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+    
+            '(ZIN) Confirmed DO
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(VLOOKUP(H" & r & ",[AMAZONDIRECT_" & d & ".xlsx]DIRECT!$A$2:$C$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 43
+    nofi = 1
+    c = c + 1
+    'cw = cw + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ 
+ End With
+ 
+ 
+End Sub
+
+Sub read_actual_DO()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 42      'On (ZIN) Actual DO
+    c = 50     'Starting Column
+    bycol = 50 'Ending Column, should be same as starting column.
+    nofi = 1
+    d = "09092019"
+    cw = 2      'Column number to read.
+
+    Do While (c < bycol + 1)
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+    
+            '(ZIN) Actual DO
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(VLOOKUP(H" & r & ",[AMAZONDIRECT_" & d & ".xlsx]ACT!$A$2:$B$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 42
+    nofi = 1
+    c = c + 1
+    'cw = cw + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ 
+ End With
+ 
+ 
+End Sub
+
+Sub read_Inventory_Of_ThisWeek()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("SB")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 32      'From (ZIN) On Hand Inventory
+    c = 50      'Starting Column
+    bycol = 50  'Ending Column
+    nofi = 1
+    d = "20190818"
+    
+    Do While (c < bycol + 1)
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 4 '4 indicates row 4
+            'INDEX([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$6:$AV$57, MATCH(1,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$G$6:$G$57=G32)*([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$L$6:$L$57="Total E.I. excluding Amazon"),0),MATCH(R4,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$4:$AV$4)))
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([SISR_SB_" & d & ".xlsm]SB!$A$6:$CR$15000, MATCH(1,([SISR_SB_" & d & ".xlsm]SB!$G$6:$G$15000=G" & r & ")*([SISR_SB_" & d & ".xlsm]SB!$L$6:$L$15000=""Total Ending Inventory""),0),MATCH(" & cname & ",([SISR_SB_" & d & ".xlsm]SB!$A$4:$CR$4),0)),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+    
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 32
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ 
+ End With
+ 
+ 
+End Sub
+Sub read_Input_Values()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("SB")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 31      'From (ZIN) Input Values
+    c = 50     'Starting Column
+    bycol = 66  'Ending Column
+    nofi = 1
+    d = "20190818"
+    
+    Do While (c < bycol + 1)
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 4 '4 indicates row 4
+            'INDEX([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$6:$AV$57, MATCH(1,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$G$6:$G$57=G32)*([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$L$6:$L$57="Total E.I. excluding Amazon"),0),MATCH(R4,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$4:$AV$4)))
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([SISR_SB_" & d & ".xlsm]SB!$A$6:$BL$15000, MATCH(1,([SISR_SB_" & d & ".xlsm]SB!$G$6:$G$15000=G" & r & ")*([SISR_SB_" & d & ".xlsm]SB!$L$6:$L$15000=""Total Input Value for AISR""),0),MATCH(" & cname & ",([SISR_SB_" & d & ".xlsm]SB!$A$4:$BL$4),0)),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+    
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 31
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ 
+ End With
+ 
+ 
+End Sub
+Sub read_Inventory_excluding_Amazon_Sales() 'DO NOT USE THIS
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 31      'From (ZIN) On Hand Inventory: Pasted
+    c = 22      'Starting Column
+    bycol = 52  'Ending Column
+    nofi = 1
+    d = "01282017"
+    
+    Do While (c < bycol + 1)
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 4 '4 indicates row 4
+            'INDEX([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$6:$AV$57, MATCH(1,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$G$6:$G$57=G32)*([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$L$6:$L$57="Total E.I. excluding Amazon"),0),MATCH(R4,([SISR_Foam_Mattress_12282016_testingmacro.xlsm]Foam!$A$4:$AV$4)))
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([SISR_FR_" & d & ".xlsm]FR!$A$6:$BR$15000, MATCH(1,([SISR_FR_" & d & ".xlsm]FR!$G$6:$G$15000=G" & r & ")*([SISR_FR_" & d & ".xlsm]FR!$L$6:$L$15000=""Total E.I. excluding Amazon""),0),MATCH(" & cname & ",([SISR_FR_" & d & ".xlsm]FR!$A$4:$BR$4),0)),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+    
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 31
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ End With
+ 
+ 
+End Sub
+
+Sub read_DI_From_Old_SISR()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+  
+    r = 10       'First row of Amazon Forecast Number
+    c = 20       'Starting column
+    bycol = 37   'Ending column
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+            
+            'AMZ
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(G" & r & ",[temp_01142017.xlsm]di!$A$2:$S$1000," & cw & ", FALSE),"""")"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+             
+            'SCM
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Formula = "=IFERROR(VLOOKUP(G" & r & ",[temp_01142017.xlsm]di!$A$2:$S$1000," & cw & ", FALSE),"""")"
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Copy
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             If .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = 0 Then .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = ""
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 10
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+End Sub
+Sub read_Accepted_DO()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    r = 11              'First row for Accepted Direct
+    c = 61              'Starting column
+    bycol = 63          'Ending column
+    nofi = 1            'Number of Item
+    sdate = "11292018"  'File date of MasterPO
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+        
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 4 '4 indicates row 4
+            
+            'For (AMZ) Accepted Direct
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$A$2:$C$7000, MATCH(1,([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$A$2:$A$7000=" & cname & ")*([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$B$2:$B$7000=H" & r & "),0),3),"""")"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+             
+             'For (SCM) Accepted Direct
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).FormulaArray = "=IFERROR(INDEX([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$A$2:$C$7000, MATCH(1,([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$A$2:$A$7000=" & cname & ")*([AcceptedDirect_" & sdate & ".xlsm]AcceptedDirect!$B$2:$B$7000=H" & r + 11 & "),0),3),"""")"
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Copy
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 11
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_SCM_Forecast_Number()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("SB")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 13       'First row of Amazon Forecast Number
+    c = 46       'Starting column
+    bycol = 71   'Ending column
+    nofi = 1     'Number of Item
+    cw = 2       'Column number of current week in ADF.xlsx
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 5) / 40) + 1)
+                      
+            'SCM
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ADF.xlsx]Sheet1!$A$2:$AA$1200," & cw & ", FALSE),"""")"
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Copy
+            .Range(.Cells(r + 11, c), .Cells(r + 11, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = 0 Then .Range(.Cells(r + 11, c), .Cells(r + 11, c)).Value = ""
+            
+
+        r = r + 40
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 13
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
