@@ -1,0 +1,77 @@
+SELECT qry_PO.[Plant Desc#], qry_PO.[New POETA], qry_PO.PO, qry_PO.Material, qry_PO.[PO Qty], qry_PO.[Received Qty], qry_PO.[In-Tranist Qty]
+FROM qry_PO
+WHERE (((qry_PO.[Plant Desc#])="Tracy"));
+
+
+SELECT qry_PO.[Plant Desc#], qry_PO.[New POETA], qry_PO.PO, qry_PO.Material, qry_PO.[PO Qty], qry_PO.[Received Qty], qry_PO.[In-Tranist Qty]
+FROM qry_PO
+WHERE (((qry_PO.[Plant Desc#])="Charleston"));
+
+
+
+SELECT PORawData.[Plant Desc#], PORawData.PO, PORawData.Material, PORawData.[PO ETA], PORawData.[Final Del Date], PORawData.[Final GR Date], PORawData.[GR Status], PORawData.[PO Qty], PORawData.[GR Qty] AS [Received Qty], [PO Qty]-[GR Qty] AS [In-Tranist Qty], PORawData.[PO Item], ([PO ETA]-(Weekday([PO ETA])-1)) AS WeekofPOETA, ([Final Del Date]-(Weekday([Final Del Date])-1)) AS WeekofFinalDelDate, ([Final GR Date]-(Weekday([Final GR Date])-1)) AS WeekofFinalGRDate, IIf([WeekofFinalGRDate] Is Null,IIf([WeekofFinalDelDate] Is Null,[WeekofPOETA],[WeekofFinalDelDate]),[WeekofFinalGRDate]) AS [New POETA]
+FROM PORawData
+WHERE (((PORawData.PO) Not Like 'AZD*' And (PORawData.PO) Not Like 'WF*'));
+
+
+
+SELECT qry_PO.[Plant Desc#], qry_PO.[New POETA], qry_PO.PO, qry_PO.Material, qry_PO.[PO Qty], qry_PO.[Received Qty], qry_PO.[In-Tranist Qty], qry_PO.[PO Item], qry_PO.[GR Status]
+FROM qry_PO;
+
+
+SELECT qry_PO.[New POETA], qry_PO.Material, qry_PO.PO, qry_PO.[Plant Desc#]
+FROM qry_PO
+GROUP BY qry_PO.[New POETA], qry_PO.Material, qry_PO.PO, qry_PO.[Plant Desc#];
+
+
+SELECT SH_Data.Warehouse, SH_Data.[Customer name], DatePart("yyyy",[Order Creation date],1,1) AS [Year#], DatePart("m",[Order Creation date],1,1) AS [Month#], DatePart("ww",[Order Creation date],1,1) AS [Week#], ([Order Creation date]-(Weekday([Order Creation date])-1)) AS WeekofOrderCreation, SH_Data.[Order Creation date], SH_Data.[ZINUS SKU], SH_Data.[QTY#], SH_Data.[Net VAlue]
+FROM SH_Data;
+
+
+SELECT SH_Data.[Customer name], ([Customer Purchase date]-(Weekday([Customer Purchase date])-1)) AS WeekofOrder, SH_Data.[Customer Purchase date], SH_Data.[ZINUS SKU], SH_Data.[QTY#], SH_Data.[DO Qty], SH_Data.Warehouse
+FROM SH_Data;
+
+
+SELECT SHForSetForAll.[Customer name], ([Customer Purchase date]-(Weekday([Customer Purchase date])-1)) AS WeekofOrder, SHForSetForAll.[Customer Purchase date], SHForSetForAll.[ZINUS SKU], SHForSetForAll.[DO Qty]
+FROM SHForSetForAll;
+
+
+SELECT qry1_SH.[ZINUS SKU], qry1_SH.[Customer name], qry1_SH.WeekofOrder, Sum(qry1_SH.[QTY#]) AS [QTY#OfSum], Sum(qry1_SH.[DO Qty]) AS [DO QtyOfSum]
+FROM qry1_SH
+GROUP BY qry1_SH.[ZINUS SKU], qry1_SH.[Customer name], qry1_SH.WeekofOrder;
+
+
+SELECT qry1_SH_SalesItem.[Customer name], qry1_SH_SalesItem.WeekofOrder, qry1_SH_SalesItem.[ZINUS SKU], Sum(qry1_SH_SalesItem.[DO Qty]) AS [DO QtyOfSum]
+FROM qry1_SH_SalesItem
+GROUP BY qry1_SH_SalesItem.[Customer name], qry1_SH_SalesItem.WeekofOrder, qry1_SH_SalesItem.[ZINUS SKU];
+
+
+SELECT qry1_SH.Warehouse, qry1_SH.WeekofOrder, qry1_SH.[ZINUS SKU], Sum(qry1_SH.[QTY#]) AS [QTY#OfSum], Sum(qry1_SH.[DO Qty]) AS [DO QtyOfSum]
+FROM qry1_SH
+GROUP BY qry1_SH.Warehouse, qry1_SH.WeekofOrder, qry1_SH.[ZINUS SKU];
+
+
+
+TRANSFORM Sum(qry2_SH.[DO QtyOfSum]) AS [DO QtyOfSumOfSum]
+SELECT qry2_SH.[ZINUS SKU], qry2_SH.[Customer name], Sum(qry2_SH.[DO QtyOfSum]) AS [Total Of DO QtyOfSum]
+FROM qry2_SH
+GROUP BY qry2_SH.[ZINUS SKU], qry2_SH.[Customer name]
+PIVOT Format([WeekofOrder],"Short Date");
+
+
+TRANSFORM Sum(qry3_SH.[DO QtyOfSum]) AS [DO QtyOfSumOfSum]
+SELECT qry3_SH.[ZINUS SKU], qry3_SH.Warehouse, Sum(qry3_SH.[DO QtyOfSum]) AS [Total Of DO QtyOfSum]
+FROM qry3_SH
+GROUP BY qry3_SH.[ZINUS SKU], qry3_SH.Warehouse
+PIVOT Format([WeekofOrder],"Short Date");
+
+
+
+TRANSFORM Sum(qry2_SH_SalesItem.[DO QtyOfSum]) AS [DO QtyOfSumOfSum]
+SELECT qry2_SH_SalesItem.[Customer name], qry2_SH_SalesItem.[ZINUS SKU], Sum(qry2_SH_SalesItem.[DO QtyOfSum]) AS [Total Of DO QtyOfSum]
+FROM qry2_SH_SalesItem
+GROUP BY qry2_SH_SalesItem.[Customer name], qry2_SH_SalesItem.[ZINUS SKU]
+PIVOT Format([WeekofOrder],"Short Date");
+
+
+
