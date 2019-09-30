@@ -1,0 +1,397 @@
+
+Sub read_Sams_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    r = 4           'First row of Amazon ABC
+    c = 2           'Starting column
+    bycol = 2       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Sams) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[Sams_ABC.csv]Sams_ABC!$B$2:$E$1000, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+
+Sub read_Sams_Actual()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 4        'First row of Amazon + Zinus Inventory
+    c = 63      'Starting column
+    bycol = 65  'Ending column
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 4) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]Sams!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+        
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 4
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 4
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+
+
+Sub auto_Sams_Actual()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+     'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+    Set loc = ThisWorkbook.Sheets("Master")  'check
+    
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\SH_SalesItem.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Sams")
+    
+    endDate = Date - 7
+    If Weekday(endDate, 2) = 7 Then
+    endWK = endDate
+    Else
+    endWK = endDate - Weekday(endDate, 2)
+    End If
+    endWK_val = DateValue(endWK)
+ 
+
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("F1").CurrentRegion.Columns.Count
+  Set lookup_range = .Range("A2:DK2")   'Range setting need improvement END OF 2019
+  
+  bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+  c = bycol - 2
+  .Range(.Cells(1, bycol), .Cells(LastRow, bycol)).Font.Color = RGB(255, 0, 0)  'CHANGE COLUMN COLOR
+    
+    r = 4        'First row of Amazon + Zinus Inventory
+  
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 4) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]Sams!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+        
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 4
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 4
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+
+ Workbooks("SH_SalesItem.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True
+ 
+ 
+End Sub
+
+
+Sub Auto_Sams_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Sams")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+
+    r = 4           'First row of Amazon ABC
+    c = 2           'Starting column
+    bycol = 2       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(K" & r & ",[ABC_all.xlsx]Sams!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+Sub Server_Sams_Actual()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+     'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+    Set loc = ThisWorkbook.Sheets("Master")  'check
+    
+    path = "\\192.168.1.41\03.Demand Planning\Elvis\Actual Sales\SH_SalesItem.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Sams")
+    
+    endDate = Date - 7
+    If Weekday(endDate, 2) = 7 Then
+    endWK = endDate
+    Else
+    endWK = endDate - Weekday(endDate, 2)
+    End If
+    endWK_val = DateValue(endWK)
+ 
+
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("F1").CurrentRegion.Columns.Count
+  Set lookup_range = .Range("A2:DK2")   'Range setting need improvement END OF 2019
+  
+  bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+  c = bycol - 2
+  .Range(.Cells(1, bycol), .Cells(LastRow, bycol)).Font.Color = RGB(255, 0, 0)  'CHANGE COLUMN COLOR
+    
+    r = 4        'First row of Amazon + Zinus Inventory
+  
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 4) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]Sams!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+        
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 4
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 4
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+
+ Workbooks("SH_SalesItem.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True
+ 
+ 
+End Sub
+
+
+Sub Server_Sams_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    ' Open ABC_all report
+    path = "\\192.168.1.41\03.Demand Planning\Elvis\Actual Sales\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Sams")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+
+    r = 4           'First row of Amazon ABC
+    c = 2           'Starting column
+    bycol = 2       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(K" & r & ",[ABC_all.xlsx]Sams!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
