@@ -1,0 +1,1 @@
+cscript Costco_ABC.vbs "C:\Users\Elvis Ma\Desktop\Actual Sales\costcocom_testing.xlsm"

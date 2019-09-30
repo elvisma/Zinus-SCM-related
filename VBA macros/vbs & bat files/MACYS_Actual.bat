@@ -1,0 +1,1 @@
+cscript MACYS_Actual.vbs "C:\Users\Elvis Ma\Desktop\Actual Sales\MACYS_testing.xlsm"

@@ -1,0 +1,658 @@
+Sub Auto_Zinus_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Zinus")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "B").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 14          'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(G" & r & ",[ABC_all.xlsx]Zinus!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+
+Sub Auto_WMT_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("WMT")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 5           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(I" & r & ",[ABC_all.xlsx]WMT!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+Sub Auto_USWayfair_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("USWF")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 3           'First row of Amazon ABC
+    c = 5           'Starting column
+    bycol = 5       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(I" & r & ",[ABC_all.xlsx]USWF!$A$2:$D$500, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+Sub Auto_Sams_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Sams")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+
+    r = 4           'First row of Amazon ABC
+    c = 2           'Starting column
+    bycol = 2       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(K" & r & ",[ABC_all.xlsx]Sams!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+Sub Auto_Costco_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Costco")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "C").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 2           'Starting column
+    bycol = 2       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(J" & r & ",[ABC_all.xlsx]Costco!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+Sub Auto_HomeDepot_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("HD")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ABC_all.xlsx]HD!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+
+
+
+Sub Auto_Overstock_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Overstock")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(J" & r & ",[ABC_all.xlsx]Overstock!$A$2:$D$500, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+Sub Auto_Chewy_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Chewy")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ABC_all.xlsx]Chewy!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+Sub Auto_Target_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Target")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ABC_all.xlsx]Target!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+####################################################################################################
+Sub Auto_Macys_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Macys")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 4           'First row of Amazon ABC
+    c = 3           'Starting column
+    bycol = 3       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(H" & r & ",[ABC_all.xlsx]Macys!$A$2:$D$300, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub

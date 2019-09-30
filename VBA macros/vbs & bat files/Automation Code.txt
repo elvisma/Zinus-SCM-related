@@ -1,0 +1,84 @@
+ 
+SET ITEM
+
+  'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+    
+   
+    Set loc = ThisWorkbook.Sheets("Master")  'check
+    Set lookup_range = loc.Range("A2:GS2")   'Range setting need improvement
+    
+    
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\SH_SalesItem.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("Costco")
+    
+    endDate = Date - 7
+    endWK = endDate - Weekday(endDate, 2)
+    endWK_val = DateValue(endWK)
+    bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+
+With openWs
+With loc
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+End With
+End With
+
+ Workbooks("SH_SalesItem.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True
+ 
+
+
+
+component item
+
+'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+    
+ 
+    
+    Set dmd = ThisWorkbook.Sheets("Demand")
+    Set lookup_range = dmd.Range("A2:DG2") 'Range setting need improvement
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\SH.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("all")
+    
+    endDate = Date - 7
+    endWK = endDate - Weekday(endDate, 2)
+    endWK_val = DateValue(endWK)
+    bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+    col1 = bycol - 2
+    
+With openWs
+With dmd
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+End With
+ End With
+ 
+   
+    
+ Workbooks("SH.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True

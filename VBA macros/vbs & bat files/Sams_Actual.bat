@@ -1,0 +1,1 @@
+cscript Sams_Actual.vbs "C:\Users\Elvis Ma\Desktop\Actual Sales\samsclub_testing.xlsb"

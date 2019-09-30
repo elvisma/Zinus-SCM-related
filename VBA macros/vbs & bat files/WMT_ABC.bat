@@ -1,0 +1,1 @@
+cscript WMT_ABC.vbs "C:\Users\Elvis Ma\Desktop\Actual Sales\WMT_testing.xlsm"

@@ -1,0 +1,11 @@
+call Costco_Actual.bat
+call HomeDepot_Actual.bat
+call MACYS_Actual.bat
+call Chewy_Actual.bat
+call eBay_Actual.bat
+call Sams_Actual.bat
+call Target_Actual.bat
+call WMT_Actual.bat
+call Zinus_Actual.bat
+call USWayfair_Actual.bat
+call OVERSTOCK_Actual.bat
