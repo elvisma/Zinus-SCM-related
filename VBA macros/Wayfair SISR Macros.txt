@@ -1,0 +1,557 @@
+
+Sub read_FORECAST()
+
+Dim col1, row1, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim rcd As Worksheet
+
+    Set rcd = ThisWorkbook.Sheets("Master")
+
+With rcd
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  'LastColumn = 128
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+  
+    row1 = 7               'Forecast Number
+    col1 = 96               'First column
+    bycol = 128              'End column
+    nofi = 1
+    
+    
+    Do While (col1 < bycol + 1)  ' Loop excute from first column to end column
+        'Do While (nofi < ((LastRow - 4) / 5) + 1)
+          Do While (nofi < ((7000 - 4) / 5) + 1)
+                        
+            .Range(.Cells(row1, col1), .Cells(row1, col1)).FormulaArray = "=IFERROR(INDEX(Demand!$A$4:$EA$7000, MATCH(1,(Demand!$F$4:$F$7000=D" & row1 & ")*(Demand!$H$4:$H$7000=""CG Forecast Number""),0)," & col1 + 3 & "),"""")"
+            .Range(.Cells(row1, col1), .Cells(row1, col1)).Copy
+            .Range(.Cells(row1, col1), .Cells(row1, col1)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             If .Range(.Cells(row1, col1), .Cells(row1, col1)).Value = 0 Then .Range(.Cells(row1, col1), .Cells(row1, col1)).Value = ""
+            
+        
+        row1 = row1 + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    row1 = 7
+    nofi = 1
+    col1 = col1 + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_CastleGate_EI()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim d As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Master")      'loc=location
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "D").End(xlUp).Row
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 8
+    c = 96       'Edit every week
+    nofi = 1
+
+        Do While (nofi < ((LastRow - 4) / 5) + 1)
+
+            'For Total Ending Inventory
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(VLOOKUP(E" & r & ",[inventory.csv]inventory!$A$2:$Q$2000,5,false),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = 0
+             
+            
+    
+        r = r + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+ End With
+ End Sub
+ 
+ Sub read_Direct_Import()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim cname, cname2 As String
+
+    Set loc = ThisWorkbook.Sheets("Master")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "E").End(xlUp).Row
+  LastColumn = .Range("E1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+   
+    r = 6              'First row for Direct Import
+    c = 94             'Starting column
+    bycol = 112          'Ending column
+    nofi = 1            'Number of Item
+       
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 4) / 5) + 1)
+        
+            cname2 = Replace(Split(Columns(c).Address, ":")(0), "$", "") 'column alphabet
+            cname = cname2 & "" & 3 '4 indicates row 3
+            
+         
+            .Range(.Cells(r, c), .Cells(r, c)).FormulaArray = "=IFERROR(INDEX([DirectImport.xlsm]DirectImport!$A$2:$Z$1000, MATCH(E" & r & ",[DirectImport.xlsm]DirectImport!$A$2:$A$10000,0),Match(" & cname & ",[DirectImport.xlsm]DirectImport!$A$1:$Z$1,0)),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = 0
+            
+
+        r = r + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 6
+    nofi = 1
+    c = c + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End Sub
+ 
+Sub read_ActualSales()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+  
+    r = 3        'First row of Amazon + Zinus Inventory
+    c = 114       'Starting column
+    bycol = 116   'Ending column
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 5) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]WFUS!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+        
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 3
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+Sub read_USWayfair_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    
+With loc
+  LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+
+    r = 3           'First row of Amazon ABC
+    c = 5           'Starting column
+    bycol = 5       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[ABC.xlsx]Wayfair!$A$2:$D$800, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ 
+ 
+End Sub
+
+
+Sub Auto_USWayfair_Actual()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+
+  'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+   
+    Set loc = ThisWorkbook.Sheets("Demand")  'check
+    Set lookup_range = loc.Range("A2:DI2")   'Range setting need improvement END OF 2019
+    
+    
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\SH_SalesItem.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("WFUS")
+    
+    endDate = Date - 7
+    If Weekday(endDate, 2) = 7 Then
+    endWK = endDate
+    Else
+    endWK = endDate - Weekday(endDate, 2)
+    End If
+    endWK_val = DateValue(endWK)
+    bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+    c = bycol - 2
+
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("F1").CurrentRegion.Columns.Count
+  .Range(.Cells(1, bycol), .Cells(LastRow, bycol)).Font.Color = RGB(255, 0, 0)  'CHANGE COLUMN COLOR
+  
+  
+    r = 3        'First row of Amazon + Zinus Inventory
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 5) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]WFUS!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 3
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+ 
+ Workbooks("SH_SalesItem.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+Sub Auto_USWayfair_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "C:\Users\Elvis Ma\Desktop\Weekly Work\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("USWF")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 3           'First row of Amazon ABC
+    c = 5           'Starting column
+    bycol = 5       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(I" & r & ",[ABC_all.xlsx]USWF!$A$2:$D$500, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+Sub Server_USWayfair_Actual()
+
+Dim r, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+
+
+  'Elvis started
+Dim endDate, endWK As Date
+Dim endWK_val As Long
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+Dim lookup_range As Range
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+   
+    Set loc = ThisWorkbook.Sheets("Demand")  'check
+    Set lookup_range = loc.Range("A2:DI2")   'Range setting need improvement END OF 2019
+    
+    
+    path = "\\192.168.1.41\03.Demand Planning\Elvis\Actual Sales\SH_SalesItem.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("WFUS")
+    
+    endDate = Date - 7
+    If Weekday(endDate, 2) = 7 Then
+    endWK = endDate
+    Else
+    endWK = endDate - Weekday(endDate, 2)
+    End If
+    endWK_val = DateValue(endWK)
+    bycol = Application.WorksheetFunction.Match(endWK_val, lookup_range, 0)
+    c = bycol - 2
+
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("F1").CurrentRegion.Columns.Count
+  .Range(.Cells(1, bycol), .Cells(LastRow, bycol)).Font.Color = RGB(255, 0, 0)  'CHANGE COLUMN COLOR
+  
+  
+    r = 3        'First row of Amazon + Zinus Inventory
+    nofi = 1     'Number of Item
+    cw = 2
+    
+    Do While (c < bycol + 1)  ' Loop excute from first column to end column
+        Do While (nofi < ((LastRow - 3) / 5) + 1)
+            
+            'Zin Inv
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(F" & r & ",[SH_SalesItem.xlsx]WFUS!$A$2:$E$1000," & cw & ", FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+             
+            'If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+
+        r = r + 5
+        nofi = nofi + 1
+        
+        Loop
+    
+    r = 3
+    nofi = 1
+    c = c + 1
+    cw = cw + 1
+    
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+ 
+ Workbooks("SH_SalesItem.xlsx").Close SaveChanges:=False
+ ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
+
+Sub Server_USWayfair_ABC()
+
+Dim r, c, bycol, nofi As Integer
+Dim LastRow, LastColumn As Long
+Dim sdate As String
+Dim loc As Worksheet
+Dim path As String
+Dim openWb As Workbook
+Dim openWs As Worksheet
+
+    Set loc = ThisWorkbook.Sheets("Demand")
+    ' Open ABC_all report
+    path = "\\192.168.1.41\03.Demand Planning\Elvis\Actual Sales\ABC_all.xlsx"
+    Set openWb = Workbooks.Open(path)
+    Set openWs = openWb.Sheets("USWF")
+    
+    'set up mode
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+With openWs
+With loc
+  LastRow = .Cells(.Rows.Count, "F").End(xlUp).Row
+  LastColumn = .Range("A1").CurrentRegion.Columns.Count
+  
+    
+    
+    
+
+    r = 3           'First row of Amazon ABC
+    c = 5           'Starting column
+    bycol = 5       'Ending column
+    nofi = 1        'Number of Item
+    
+        Do While (nofi < LastRow)
+            
+            'For (Overstock) ABC
+            .Range(.Cells(r, c), .Cells(r, c)).Formula = "=IFERROR(VLOOKUP(I" & r & ",[ABC_all.xlsx]USWF!$A$2:$D$500, 4, FALSE),0)"
+            .Range(.Cells(r, c), .Cells(r, c)).Copy
+            .Range(.Cells(r, c), .Cells(r, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+            
+            If .Range(.Cells(r, c), .Cells(r, c)).Value = 0 Then .Range(.Cells(r, c), .Cells(r, c)).Value = ""
+            
+        r = r + 1
+        nofi = nofi + 1
+        
+        Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+    
+ End With
+ End With
+  Workbooks("ABC_all.xlsx").Close SaveChanges:=False
+  ActiveWorkbook.Close SaveChanges:=True
+ 
+End Sub
+
+
