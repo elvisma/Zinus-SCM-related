@@ -1,0 +1,263 @@
+Sub Combine_Update_FcstNum()
+
+Dim csc, hd, os, sc, target, wf, wmt, zinus, macys, cmatch, c, bycol, nofi, cw As Integer
+Dim LastRow, LastColumn As Long
+Dim loc As Worksheet
+
+Dim startDate, startWK As Date
+Dim startWK_val As Long
+Dim lookup_range As Range
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.DisplayStatusBar = False
+    
+    Set loc = ThisWorkbook.Sheets("BX")
+    
+    startDate = Date
+    startWK = startDate - Weekday(startDate, 2)
+    startWK_val = DateValue(startWK)
+    
+  With loc
+    LastRow = .Cells(.Rows.Count, "A").End(xlUp).Row
+    LastColumn = .Range("A1").CurrentRegion.Columns.Count
+    Set lookup_range = .Range("A4:DL4")   'Range setting need to be updated regularly
+    
+    csc = 39
+    hd = 40
+    os = 44
+    sc = 45
+    target = 48
+    wf = 49
+    wmt = 50
+    zinus = 51
+    macys = 52
+    
+    
+    cmatch = Application.WorksheetFunction.Match(startWK_val, lookup_range, 0)
+    
+    c = cmatch
+    bycol = cmatch + 25
+    nofi = 1
+    cw = 2
+    
+  
+    'Costco Forecast
+    Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+            .Range(.Cells(csc, c), .Cells(csc, c)).Formula = "=IFERROR(VLOOKUP(G" & csc & ",[FcstNum.xlsx]CSC!$A$2:$AA$1200," & cw & ", FALSE),0)"
+            .Range(.Cells(csc, c), .Cells(csc, c)).Copy
+            .Range(.Cells(csc, c), .Cells(csc, c)).PasteSpecial (xlPasteValues)
+            Application.CutCopyMode = False
+        
+            If .Range(.Cells(csc, c), .Cells(csc, c)).Value = 0 Then .Range(.Cells(csc, c), .Cells(csc, c)).Value = ""
+
+       csc = csc + 52
+       nofi = nofi + 1
+      Loop
+      
+      csc = 39
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    
+    Loop
+    
+    
+    'Home Depot Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+          .Range(.Cells(hd, c), .Cells(hd, c)).Formula = "=IFERROR(VLOOKUP(G" & hd & ",[FcstNum.xlsx]HD!$A$2:$AA$1200," & cw & ", FALSE),0)"
+          .Range(.Cells(hd, c), .Cells(hd, c)).Copy
+          .Range(.Cells(hd, c), .Cells(hd, c)).PasteSpecial (xlPasteValues)
+          Application.CutCopyMode = False
+        
+          If .Range(.Cells(hd, c), .Cells(hd, c)).Value = 0 Then .Range(.Cells(hd, c), .Cells(hd, c)).Value = ""
+
+       hd = hd + 52
+       nofi = nofi + 1
+    
+      Loop
+      hd = 40
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    
+    'Overstock Forecast
+    c = cmatch
+   
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(os, c), .Cells(os, c)).Formula = "=IFERROR(VLOOKUP(G" & os & ",[FcstNum.xlsx]OS!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(os, c), .Cells(os, c)).Copy
+        .Range(.Cells(os, c), .Cells(os, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(os, c), .Cells(os, c)).Value = 0 Then .Range(.Cells(os, c), .Cells(os, c)).Value = ""
+
+       os = os + 52
+       nofi = nofi + 1
+    
+      Loop
+      os = 44
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    
+    'Walmart Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(wmt, c), .Cells(wmt, c)).Formula = "=IFERROR(VLOOKUP(G" & wmt & ",[FcstNum.xlsx]WMT!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(wmt, c), .Cells(wmt, c)).Copy
+        .Range(.Cells(wmt, c), .Cells(wmt, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(wmt, c), .Cells(wmt, c)).Value = 0 Then .Range(.Cells(wmt, c), .Cells(wmt, c)).Value = ""
+
+       wmt = wmt + 52
+       nofi = nofi + 1
+    
+      Loop
+      wmt = 50
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    'SamsClub Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(sc, c), .Cells(sc, c)).Formula = "=IFERROR(VLOOKUP(G" & sc & ",[FcstNum.xlsx]SC!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(sc, c), .Cells(sc, c)).Copy
+        .Range(.Cells(sc, c), .Cells(sc, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(sc, c), .Cells(sc, c)).Value = 0 Then .Range(.Cells(sc, c), .Cells(sc, c)).Value = ""
+       
+       sc = sc + 52
+       nofi = nofi + 1
+      Loop
+      sc = 45
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    
+    'Target Forecast
+    
+    bycol = c + 20
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(target, c), .Cells(target, c)).Formula = "=IFERROR(VLOOKUP(G" & target & ",[FcstNum.xlsx]Target!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(target, c), .Cells(target, c)).Copy
+        .Range(.Cells(target, c), .Cells(target, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(target, c), .Cells(target, c)).Value = 0 Then .Range(.Cells(target, c), .Cells(target, c)).Value = ""
+        
+       target = target + 52
+       nofi = nofi + 1
+      Loop
+      target = 48
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    
+    'Wayfair DDS Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(wf, c), .Cells(wf, c)).Formula = "=IFERROR(VLOOKUP(G" & wf & ",[FcstNum.xlsx]WFDDS!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(wf, c), .Cells(wf, c)).Copy
+        .Range(.Cells(wf, c), .Cells(wf, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(wf, c), .Cells(wf, c)).Value = 0 Then .Range(.Cells(wf, c), .Cells(wf, c)).Value = ""
+       wf = wf + 52
+       nofi = nofi + 1
+      Loop
+      
+      wf = 49
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    
+     'Zinus.com Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(zinus, c), .Cells(zinus, c)).Formula = "=IFERROR(VLOOKUP(G" & zinus & ",[FcstNum.xlsx]Zinus!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(zinus, c), .Cells(zinus, c)).Copy
+        .Range(.Cells(zinus, c), .Cells(zinus, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(zinus, c), .Cells(zinus, c)).Value = 0 Then .Range(.Cells(zinus, c), .Cells(zinus, c)).Value = ""
+       zinus = zinus + 52
+       nofi = nofi + 1
+      Loop
+      zinus = 51
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+     'Macys Forecast
+    c = cmatch
+    
+    nofi = 1
+    cw = 2
+     Do While (c < bycol + 1)
+      Do While (nofi < ((LastRow - 5) / 52) + 1)
+        .Range(.Cells(macys, c), .Cells(macys, c)).Formula = "=IFERROR(VLOOKUP(G" & macys & ",[FcstNum.xlsx]Macys!$A$2:$AA$1200," & cw & ", FALSE),0)"
+        .Range(.Cells(macys, c), .Cells(macys, c)).Copy
+        .Range(.Cells(macys, c), .Cells(macys, c)).PasteSpecial (xlPasteValues)
+        Application.CutCopyMode = False
+        
+        If .Range(.Cells(macys, c), .Cells(macys, c)).Value = 0 Then .Range(.Cells(macys, c), .Cells(macys, c)).Value = ""
+       macys = macys + 52
+       nofi = nofi + 1
+      Loop
+      macys = 52
+      nofi = 1
+      c = c + 1
+      cw = cw + 1
+    Loop
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.DisplayStatusBar = True
+  End With
+
+
+End Sub
