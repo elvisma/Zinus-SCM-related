@@ -12,7 +12,7 @@ import os
 # folder directory
 folderpath="C:/Users/Elvis Ma/Desktop/Weekly Work/space_planning/"
 
-startCol=50 # 9/22 2019 weekly change 
+startCol=52 # 10/6 2019 weekly change 
 
 
 # All category SISRs to modify, save
@@ -44,7 +44,7 @@ FN_path=folderpath+FN_SISR
 #IM_SISR="SISR_IM_Direct.xlsm"
 #IM_path=folderpath+IM_SISR
 
-# Load the workbook for all categories
+# Load the workbook for all categories with all formulas
 
 wb_SB=load_workbook(SB_path)
 sheet_SB=wb_SB.active
@@ -70,12 +70,44 @@ sheet_OT=wb_OT.active
 wb_FN=load_workbook(FN_path)
 sheet_FN=wb_FN.active
 
+## Load the workbook with data values only
+wb_SB_data=load_workbook(SB_path,data_only=True)
+sheet_SB_data=wb_SB_data.active
+
+wb_BX_data=load_workbook(BX_path,data_only=True)
+sheet_BX_data=wb_BX_data.active
+
+wb_FR_data=load_workbook(FR_path,data_only=True)
+sheet_FR_data=wb_FR_data.active
+
+wb_FM_data=load_workbook(FM_path,data_only=True)
+sheet_FM_data=wb_FM_data.active
+
+wb_SM_data=load_workbook(SM_path,data_only=True)
+sheet_SM_data=wb_SM_data.active
+
+wb_PB_data=load_workbook(PB_path,data_only=True)
+sheet_PB_data=wb_PB_data.active
+
+wb_OT_data=load_workbook(OT_path,data_only=True)
+sheet_OT_data=wb_OT_data.active
+
+wb_FN_data=load_workbook(FN_path,data_only=True)
+sheet_FN_data=wb_FN_data.active
+
 #wb_IM=load_workbook(IM_path)
 #sheet_IM=wb_IM.active
 
 # modification & save the file 
 
-
+def pasteInv(worksheet,worksheet_data,startcol):
+    for col in range(startcol+1,startcol+25):
+        ### West
+        for row in range(22,worksheet.max_row,52):
+            worksheet[get_column_letter(col)+str(row)]=worksheet_data[get_column_letter(col)+str(row)].value
+        ### East
+        for row in range(31, worksheet.max_row,52):
+            worksheet[get_column_letter(col)+str(row)]=worksheet_data[get_column_letter(col)+str(row)].value
 
 def deleteAMZ(worksheet,startcol):
     for col in range(startcol+1,startcol+25):
@@ -85,6 +117,16 @@ def deleteAMZ(worksheet,startcol):
         ### for Amazon DDS
         for row in range(35, worksheet.max_row,52):
             worksheet[get_column_letter(col)+str(row)]=0
+
+pasteInv(sheet_SB,sheet_SB_data,startCol)
+pasteInv(sheet_BX,sheet_BX_data,startCol)
+pasteInv(sheet_FR,sheet_FR_data,startCol)
+pasteInv(sheet_FM,sheet_FM_data,startCol)
+pasteInv(sheet_SM,sheet_SM_data,startCol)
+pasteInv(sheet_PB,sheet_PB_data,startCol)
+pasteInv(sheet_OT,sheet_OT_data,startCol)
+pasteInv(sheet_FN,sheet_FN_data,startCol)
+
   
 deleteAMZ(sheet_SB,startCol)          
 deleteAMZ(sheet_BX,startCol)
